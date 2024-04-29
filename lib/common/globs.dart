@@ -80,7 +80,7 @@ class Globs {
 }
 
 class SVKey {
-  static const mainUrl = "http://192.168.1.2:3001";
+  static const mainUrl = "http://192.168.1.22:3001";
   static const baseUrl = '$mainUrl/api/';
   static const nodeUrl = mainUrl;
 
@@ -89,6 +89,9 @@ class SVKey {
   static const svForgotPasswordRequest = '${baseUrl}forgot_password_request';
   static const svForgotPasswordVerify = '${baseUrl}forgot_password_verify';
   static const svForgotPasswordSetNew = '${baseUrl}forgot_password_set_new';
+  static const addToCart = '${baseUrl}cart';
+  static const fetchUserCart = '${baseUrl}cart';
+  static const deleteCartItem = '${baseUrl}cart';
 }
 
 class KKey {

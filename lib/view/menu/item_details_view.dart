@@ -1,32 +1,78 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:food_delivery/common/extension.dart';
+import 'package:food_delivery/common/globs.dart';
+import 'package:food_delivery/common/service_call.dart';
 import 'package:food_delivery/common_widget/round_icon_button.dart';
+import 'package:food_delivery/controller/food_controller.dart';
+import 'package:food_delivery/view/on_boarding/on_boarding_view.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/color_extension.dart';
 import '../more/my_order_view.dart';
 
 class ItemDetailsView extends StatefulWidget {
-  const ItemDetailsView({super.key});
+  int index;
+  ItemDetailsView({super.key,required this.index});
 
   @override
   State<ItemDetailsView> createState() => _ItemDetailsViewState();
 }
 
 class _ItemDetailsViewState extends State<ItemDetailsView> {
-  double price = 15;
+
   int qty = 1;
   bool isFav = false;
+  Future <void> Addcart(int index) async{
+    
+    try{
+      SharedPreferences sprf=await SharedPreferences.getInstance();
+      String? user_id= await sprf.getString("userId");
+      var response= await http.post(Uri.parse("http://192.168.1.22:3001/api/cart"),
+      headers: {
+        // 'Content-Type':'application/x-www-form-urlencoded',
+        // '':''
+      },
+      body: {
+        "user_id":user_id,
+      "restaurant_id":"1",
+      "menu_item_id":"$index",
+      "portion_id":"1",
+      "ingredient_id":"1",
+      "qty":"$qty"
+      }
+      
+      );
+      if(response.statusCode==200){
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item Add TO Cart Successful")));
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(response.body)));
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item Add TO Cart Failed")));
+
+      }
+    }catch (e){
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text('$e')));
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+      double price =double.parse(Provider.of<Foodcontroller>(context).menuItemsArr[widget.index]['price']);
+
     var media = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: TColor.white,
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          Image.asset(
-            "assets/img/detail_top.png",
+          Image.asset(Provider.of<Foodcontroller>(context).menuItemsArr[widget.index]['image'],
             width: media.width,
             height: media.width,
             fit: BoxFit.cover,
@@ -68,7 +114,7 @@ class _ItemDetailsViewState extends State<ItemDetailsView> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 25),
                                 child: Text(
-                                  "Tandoori Chicken Pizza",
+                                  Provider.of<Foodcontroller>(context).menuItemsArr[widget.index]['name'],
                                   style: TextStyle(
                                       color: TColor.primaryText,
                                       fontSize: 22,
@@ -115,7 +161,7 @@ class _ItemDetailsViewState extends State<ItemDetailsView> {
                                           height: 4,
                                         ),
                                         Text(
-                                          " 4 Star Ratings",
+                                          " 4.9 Star Ratings",
                                           style: TextStyle(
                                               color: TColor.primary,
                                               fontSize: 11,
@@ -128,7 +174,7 @@ class _ItemDetailsViewState extends State<ItemDetailsView> {
                                           CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          "\$${price.toStringAsFixed(2)}",
+                                          "\$${Provider.of<Foodcontroller>(context).menuItemsArr[widget.index]['price']}",
                                           style: TextStyle(
                                               color: TColor.primaryText,
                                               fontSize: 31,
@@ -170,7 +216,7 @@ class _ItemDetailsViewState extends State<ItemDetailsView> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 25),
                                 child: Text(
-                                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ornare leo non mollis id cursus. Eu euismod faucibus in leo malesuada",
+                                  Provider.of<Foodcontroller>(context).menuItemsArr[widget.index]['desc'],
                                   style: TextStyle(
                                       color: TColor.secondaryText,
                                       fontSize: 12),
@@ -459,7 +505,9 @@ class _ItemDetailsViewState extends State<ItemDetailsView> {
                                                         icon:
                                                             "assets/img/shopping_add.png",
                                                         color: TColor.primary,
-                                                        onPressed: () {}),
+                                                        onPressed: () {
+                                                          Addcart(widget.index);
+                                                        }),
                                                   )
                                                 ],
                                               )),

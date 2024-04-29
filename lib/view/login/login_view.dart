@@ -6,6 +6,7 @@ import 'package:food_delivery/common_widget/round_button.dart';
 import 'package:food_delivery/view/login/rest_password_view.dart';
 import 'package:food_delivery/view/login/sing_up_view.dart';
 import 'package:food_delivery/view/on_boarding/on_boarding_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/service_call.dart';
 import '../../common_widget/round_icon_button.dart';
@@ -188,7 +189,8 @@ class _LoginViewState extends State<LoginView> {
         withSuccess: (responseObj) async {
       Globs.hideHUD();
       if (responseObj[KKey.status] == "1") {
-        
+        SharedPreferences sprf= await SharedPreferences.getInstance();
+        sprf.setString("userId", '${responseObj['payload']['user_id']}');
         Globs.udSet( responseObj[KKey.payload] as Map? ?? {} , Globs.userPayload);
         Globs.udBoolSet(true, Globs.userLogin);
 

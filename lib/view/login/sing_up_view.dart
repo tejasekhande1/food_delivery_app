@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:food_delivery/common/color_extension.dart';
@@ -193,7 +194,7 @@ class _SignUpViewState extends State<SignUpView> {
       "address": txtAddress.text,
       "password": txtPassword.text,
       "push_token": "",
-      "device_type": Platform.isAndroid ? "A" : "I"
+      "device_type":  "A" 
     });
   }
 
@@ -201,7 +202,7 @@ class _SignUpViewState extends State<SignUpView> {
 
   void serviceCallSignUp(Map<String, dynamic> parameter) {
     Globs.showHUD();
-
+    log("message");
     ServiceCall.post(parameter, SVKey.svSignUp,
         withSuccess: (responseObj) async {
       Globs.hideHUD();
