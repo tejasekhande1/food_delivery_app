@@ -3,9 +3,11 @@ import 'package:food_delivery/common/color_extension.dart';
 import 'package:food_delivery/common/extension.dart';
 import 'package:food_delivery/common/globs.dart';
 import 'package:food_delivery/common_widget/round_button.dart';
+import 'package:food_delivery/controller/userdetail_controller.dart';
 import 'package:food_delivery/view/login/rest_password_view.dart';
 import 'package:food_delivery/view/login/sing_up_view.dart';
 import 'package:food_delivery/view/on_boarding/on_boarding_view.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/service_call.dart';
@@ -191,6 +193,7 @@ class _LoginViewState extends State<LoginView> {
       if (responseObj[KKey.status] == "1") {
         SharedPreferences sprf= await SharedPreferences.getInstance();
         sprf.setString("userId", '${responseObj['payload']['user_id']}');
+        Provider.of<Userdetailcontroller>(context,listen: false).changedata(name: responseObj['payload']['name'], email: responseObj['payload']['email'], pass: responseObj['payload']['password'], mobileno: responseObj['payload']['mobile'], add: responseObj['payload']['address']);
         Globs.udSet( responseObj[KKey.payload] as Map? ?? {} , Globs.userPayload);
         Globs.udBoolSet(true, Globs.userLogin);
 

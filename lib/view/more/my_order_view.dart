@@ -30,8 +30,23 @@ class _MyOrderViewState extends State<MyOrderView> {
   //   {"name": "French Fires Large", "qty": "1", "price": 6.0}
   ];
 
-  void deleteCart( var val){
+  
 
+  Future<void> deleteCart( var val,context)async{
+    try{
+      print(val);
+      var response =await http.delete(Uri.parse("http://192.168.1.22:3001/api/cart/$val"));
+
+      if(response.statusCode==200){
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("delete Successful")));
+      }else{
+        print(response.body);
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("aFailed to delete")));
+      }
+    }catch (e){
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Failed to delete")));
+    }
   }
 
 
@@ -50,7 +65,8 @@ class _MyOrderViewState extends State<MyOrderView> {
         });
 
       }else{
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed')));
+        print(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('aFailed')));
 
       }
 
@@ -100,34 +116,12 @@ class _MyOrderViewState extends State<MyOrderView> {
                               Expanded(
                                       child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                            MainAxisAlignment.center,
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              // showbottomsheet(
-                                              //     false, data1[index]);
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.all(5),
-                                              height: 32,
-                                              width: 32,
-                                              decoration: BoxDecoration(
-                                                color: const Color.fromRGBO(
-                                                    89, 57, 241, 1),
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              child: const Icon(
-                                                Icons.edit_outlined,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
                                               setState(() {
-                                                // deleteCard(data1[index].cardno);
+                                                deleteCart(itemArr[index]['cart_id'],context);
                                               });
                                             },
                                             child: Container(

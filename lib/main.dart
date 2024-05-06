@@ -7,6 +7,7 @@ import 'package:food_delivery/common/locator.dart';
 import 'package:food_delivery/common/service_call.dart';
 import 'package:food_delivery/controller/cart_controller.dart';
 import 'package:food_delivery/controller/food_controller.dart';
+import 'package:food_delivery/controller/userdetail_controller.dart';
 import 'package:food_delivery/view/login/welcome_view.dart';
 import 'package:food_delivery/view/main_tabview/main_tabview.dart';
 import 'package:food_delivery/view/on_boarding/startup_view.dart';
@@ -67,6 +68,10 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (context){
             return Cartcontroller();
           }),
+          ChangeNotifierProvider(
+            create: (context){
+              return Userdetailcontroller();
+            })
       ],
       child: MaterialApp(
         title: 'Food Delivery',

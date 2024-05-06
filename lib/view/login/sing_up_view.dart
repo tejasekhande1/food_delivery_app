@@ -209,13 +209,9 @@ class _SignUpViewState extends State<SignUpView> {
       if (responseObj[KKey.status] == "1") {
         Globs.udSet(responseObj[KKey.payload] as Map? ?? {}, Globs.userPayload);
         Globs.udBoolSet(true, Globs.userLogin);
-        
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const OnBoardingView(),
-            ),
-            (route) => false);
+        Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => const LoginView(),
+            ),);
       } else {
         mdShowAlert(Globs.appName,
             responseObj[KKey.message] as String? ?? MSG.fail, () {});
