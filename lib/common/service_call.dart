@@ -17,14 +17,15 @@ class ServiceCall {
       {bool isToken = false, ResSuccess? withSuccess, ResFailure? failure}) {
     Future(() {
       try {
-        var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+       // var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
 
         // if(isToken) {
         //   headers["token"] = "";
         // }
 
-        http
-            .post(Uri.parse(path), body: parameter, headers: headers)
+        http.post(Uri.parse(path), body: parameter, 
+           // headers: headers
+            )
             .then((value) {
           if (kDebugMode) {
             print(value.body);

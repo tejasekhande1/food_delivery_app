@@ -206,6 +206,7 @@ class _SignUpViewState extends State<SignUpView> {
     ServiceCall.post(parameter, SVKey.svSignUp,
         withSuccess: (responseObj) async {
       Globs.hideHUD();
+       log("message1");
       if (responseObj[KKey.status] == "1") {
         Globs.udSet(responseObj[KKey.payload] as Map? ?? {}, Globs.userPayload);
         Globs.udBoolSet(true, Globs.userLogin);

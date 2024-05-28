@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:food_delivery/common/globs.dart';
 import 'package:food_delivery/common_widget/round_button.dart';
 import 'package:food_delivery/controller/userdetail_controller.dart';
 import 'package:image_picker/image_picker.dart';
@@ -36,14 +37,15 @@ Future<void > changeProfile()async{
       print(txtPassword.text);
       var userid= sprf.getString("userId");
       print(userid);
-      var response=await http.put(Uri.parse("http://192.168.1.22:3001/api/user/$userid"),
+      var prof=SVKey.profile;
+      var response=await http.put(Uri.parse("$prof/$userid"),
       body: {
         "name":txtName.text,
         "email":txtEmail.text,
         "mobile":txtMobile.text,
         "address":txtAddress.text,
         "password":txtPassword.text,
-        "confirmedPassword ":txtConfirmPassword.text
+        "confirmedPassword":txtConfirmPassword.text
       }
       );
    if(response.statusCode==200){
@@ -118,11 +120,12 @@ Future<void > changeProfile()async{
                     child: Image.file(File(image!.path),
                         width: 100, height: 100, fit: BoxFit.cover),
                   )
-                : Icon(
-                    Icons.person,
-                    size: 65,
-                    color: TColor.secondaryText,
-                  ),
+                 : Text(Provider.of<Userdetailcontroller>(context).name[0]+Provider.of<Userdetailcontroller>(context).name[1],style: const TextStyle(fontWeight: FontWeight.w900,fontSize: 25),)
+                  // Icon(
+                //     Icons.person,
+                //     size: 65,
+                //     color: TColor.secondaryText,
+                //   ),
           ),
           // TextButton.icon(
           //   onPressed: () async {
